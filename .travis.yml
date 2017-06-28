@@ -1,28 +1,23 @@
 dist: trusty
 sudo: false
-
-# Only trigger builds on master/pr and release tags
 branches:
   only:
-    - master
-    - /^v?([0-9]*)\.([0-9]*)\.([0-9]*)$/
-
+  - master
+  - "/^v?([0-9]*)\\.([0-9]*)\\.([0-9]*)$/"
 env:
-  # This environment variable tells Terraform not to prompt for input. This is
-  # not required, but if we make a mistake, the Travis builder will hang waiting
-  # for user input, tieing up unnecessary resources.
+  matrix:
   - TF_INPUT=false
-
-# Install terraform
+  global:
+    secure: r1qvUWZAFL9HQctUU9U4B5nWE4eNasw/mNAmpHyGPcvLyoFcJpT32J2jpJCFMN0tDeMbX7WiGBWKoZ7/6n0r9bzXCTXwWEzqZ2AWh69dv3eRFFd9aMz+NF89XN3bNDewi4/YzLQJ0Vt8/GTffsmMM1+kZYYH5ayZJph35F2Kri0oDOAszKJF/KNrwvonxNVbSS+aPvEicz5lkm0hoDC8QetPWiJl7AWhxJmHj05qlARbKd/Xh22MryIYqrPCWW8oP+mXfZ0wiN9FxwYS1oEANq7N2gtwHEqqC0UMERAtxbqc8hmdoBUg9/qdhq7xbPxxya4ICKy22dkfP5e9+lc1YSUfbKRK8MEbWCcsqm0CMZUcksbqOTebSr2nUEbG7jCiVPdvwA0Hq673rSkFX8y2o7jC0yEM0Mj8bbewc3dJgDDq5yOAygB6pboNxRQeBT/89a1WoSKUE8Z3dRjjjo1QLJSVapjaeqzZuHIUKNU0REhEspyMZswf3UM/9F//7tyFV4Z5lSLa3ucgNpf4kkv0W51Z6R+/TY8O3QppqygRfciuBB55mVj8MwJxmKwWIxrlatuHgaoBUOBJUa5rAJRQ43C8m1wL/AF/wlpat2mKmifGJ8mcH+khx0hlaK447ZIJx9BLrkmirHt2pde24tuZFF87UokEXmnysJcssUDAKQ8=
 before_install:
-  - curl -sLo /tmp/terraform.zip https://releases.hashicorp.com/terraform/0.9.8/terraform_0.9.8_linux_amd64.zip
-  - unzip /tmp/terraform.zip -d /tmp
-  - mkdir ~/bin
-  - mv /tmp/terraform ~/bin
-  - export PATH="~/bin:$PATH"
-
-script: terraform plan ./terraform
-
+- curl -sLo /tmp/terraform.zip https://releases.hashicorp.com/terraform/0.9.8/terraform_0.9.8_linux_amd64.zip
+- unzip /tmp/terraform.zip -d /tmp
+- mkdir ~/bin
+- mv /tmp/terraform ~/bin
+- export PATH="~/bin:$PATH"
+script:
+  - terraform init
+  - terraform plan
 deploy:
 - provider: script
   skip_cleanup: true
